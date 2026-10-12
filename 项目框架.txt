@@ -24,20 +24,29 @@ DataStore。这样换界面不影响业务。
               Sort.h/.cpp      排序 + 二分查找      导诊结果排序
 
   model/    Entity.h       六个实体结构体 + 状态常量
-  data/     DataStore.h    数据仓库：主表 + 索引 + 排班网格 + 号源操作
-  file/     FileLoader.h   文本文件加载 + 行解析
-  service/  Triage.h       智能导诊（加权二部图）
-            DoctorQuery.h  医生查询 + 排班号源
-  menu/     Menu.h         界面层
-  src/      main.cpp       程序入口
-  tests/ tools/ files/     自检、数据生成器、测试数据
-  util/     Console.h      控制台工具（显示宽度、输入校验）
+  data/     DataStore.h/.cpp 数据仓库：主表 + 索引 + 排班网格 + 号源操作
+  file/     FileLoader.h/.cpp 文本文件加载 + 行解析
+  service/  Triage.h/.cpp      智能导诊（加权二部图）
+            DoctorQuery.h/.cpp 医生查询 + 排班号源
+  util/     Console.h/.cpp  控制台工具（显示宽度、输入校验）
+  menu/     Menu.h/.cpp     界面层
+  src/      main.cpp        程序入口
+  tests/    自检程序（6 个，共 511 项断言）
+  tools/    gen_data.cpp    测试数据生成器
+  files/    测试数据（6 个文本文件）
+
 ds/ 下 SeqList、LinkedList、Queue 只有 .h —— 模板类的实现必须与声明放
 同一文件，否则编译时看不到函数体，链接阶段会报 undefined reference。
 HashTable、Sort 不是模板，拆成 .h + .cpp。
 
-当前完成情况：ds/ 五个容器与 model/Entity.h 已完成；其余模块只有头文件
-与说明，未实现。
+各模块均已实现。自检共 511 项断言，分 6 个程序：
+
+  test_ds       121 项   顺序表、链表、哈希表、循环队列、排序
+  test_entity    99 项   六个实体结构体、状态判定、字符串安全
+  test_loader    92 项   数据加载、索引可用性、号源操作、容错
+  test_triage    74 项   导诊打分、匹配度、排序稳定性、边界
+  test_query     77 项   条件查询、组合条件、号源统计
+  test_console   48 项   UTF-8 码点、显示宽度、按宽度截断、整数解析
 
 三、数据结构选用
 ----------------
