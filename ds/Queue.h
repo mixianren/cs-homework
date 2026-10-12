@@ -16,7 +16,18 @@
  *  入队：data[rear] = x;  rear  = (rear  + 1) % capacity;
  *  出队：x = data[front]; front = (front + 1) % capacity;
  *
- 
+ *  【为什么要空出一个位置】
+ *  队空和队满时，如果只用 front == rear 判断，两种情况的条件完全一样，
+ *  无法区分。牺牲一个存储位置后：
+ *      队空：front == rear
+ *      队满：(rear + 1) % capacity == front
+ *  两个状态就区分开了。这是最省事的解决办法。
+ *
+ *  因此队列实际最多容纳 capacity - 1 个元素。
+ *
+ *  【为什么本文件没有对应的 .cpp】
+ *  与 SeqList.h 同理：这是模板类，实现必须写在头文件里，否则链接期报
+ *  undefined reference。详见 ds/SeqList.h 顶部的完整说明。
  * ==========================================================================*/
 
 template <typename T>
