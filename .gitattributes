@@ -1,0 +1,49 @@
+# ============================================================================
+#  Git 属性配置
+#  作用：统一行尾、声明二进制文件、标出编码要求。
+#  这个文件应与源码一起提交。
+# ============================================================================
+
+# ---- 行尾策略 ----
+# 仓库内统一存成 LF，检出时按下面的规则转换。
+# 这样在 Windows 和 Linux 上克隆都得到正确的结果，也避免
+# "同一个文件在两个人机器上显示整篇改动"这种假 diff。
+* text=auto eol=lf
+
+# Windows 批处理脚本检出成 CRLF。
+# 绝大多数现代 Windows 能处理 LF 的 .bat，但老版本 cmd.exe 对 LF 结尾的
+# 批处理有已知问题（例如 goto/label 解析异常）。显式声明 CRLF 最稳妥。
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+
+# ---- 二进制文件：不做行尾转换，也不做文本 diff ----
+*.exe  binary
+*.obj  binary
+*.o    binary
+*.a    binary
+*.dll  binary
+*.pdb  binary
+*.ilk  binary
+
+# ---- 文本文件 ----
+*.h    text
+*.cpp  text
+*.txt  text
+*.md   text
+*.json text
+*.gitignore text
+
+# ---- diff 提示 ----
+# 数据文件是定长格式，按文本处理即可；
+# 但 .txt 里的中文需要在查看 diff 时注意终端编码（见下方说明）。
+#
+# 【编码约定：全部 UTF-8，不带 BOM】
+# 源码、数据文件、文档都用 UTF-8 (no BOM)。
+#   - 源码含中文注释与字符串，build.bat 里用 -finput-charset=UTF-8 告知编译器
+#   - 数据文件是 UTF-8，程序按字节解析
+#   - 不要用记事本"另存为 ANSI"或加 BOM，否则会出现乱码或解析错误
+#
+# 【查看中文 diff 的建议】
+# git 默认按字节比较，中文 diff 在终端里可能显示为转义序列。
+# 可以执行：git config --global core.quotepath false
+# 这样中文文件名/内容不会被显示成 \344\270\255 这种八进制转义。

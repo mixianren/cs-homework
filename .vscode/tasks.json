@@ -1,0 +1,143 @@
+{
+    // =====================================================================
+    //  VS Code 编译任务
+    // ---------------------------------------------------------------------
+    //  工程不用 CMake，编译工作由根目录的 build.bat 完成，
+    //  这里只是把它包装成 VS Code 任务，让快捷键和菜单能用。
+    //
+    //  【为什么显式写 shell: cmd.exe】
+    //  build.bat 是批处理脚本，本来就应该由 cmd.exe 执行。
+    //  交给默认终端（PowerShell）去跑时参数传递方式不同，会出现
+    //  "Parameter format not correct - -Command" 这类报错。
+    //  这里把解释器写死，不依赖用户的终端配置。
+    //
+    //  【为什么 instanceLimit = 1】
+    //  多次按 F7 会产生多个任务实例，VS Code 会弹出
+    //  "选择要终止的实例" 让你手动选，很烦。
+    //  限制为 1 个实例后，新任务自动顶掉旧的，不再询问。
+    //
+    //  使用方式：
+    //      F7                               编译（默认生成任务）
+    //      Shift+F7                         弹出任务列表
+    //      Ctrl+Shift+P -> Tasks: Run Task  同上
+    // =====================================================================
+    "version": "2.0.0",
+    "tasks": [
+        {
+            // ---- 默认任务：F7 触发 ----
+            "label": "编译",
+            "type": "shell",
+            "command": "build.bat",
+            "args": [],
+            "options": {
+                // 直接用 cmd.exe 跑批处理，避免 PowerShell 参数解析问题
+                "shell": {
+                    "executable": "cmd.exe",
+                    "args": ["/d", "/c"]
+                },
+                // build.bat 里用的是相对路径，工作目录必须是工程根目录
+                "cwd": "${workspaceFolder}"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true,
+                "echo": true
+            },
+            // 只允许 1 个实例：新任务自动终止旧的，不再弹选择框
+            "runOptions": {
+                "instanceLimit": 1
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            // ---- 编译并运行全部自检 ----
+            "label": "编译并测试",
+            "type": "shell",
+            "command": "build.bat",
+            "args": ["test"],
+            "options": {
+                "shell": { "executable": "cmd.exe", "args": ["/d", "/c"] },
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "test",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true,
+                "echo": true
+            },
+            "runOptions": {
+                "instanceLimit": 1
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            // ---- 编译并运行主程序 ----
+            "label": "编译并运行",
+            "type": "shell",
+            "command": "build.bat",
+            "args": ["run"],
+            "options": {
+                "shell": { "executable": "cmd.exe", "args": ["/d", "/c"] },
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true,
+                "echo": true
+            },
+            "runOptions": {
+                "instanceLimit": 1
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            // ---- 重新生成测试数据（修改 tools/gen_data.cpp 后用）----
+            "label": "生成测试数据",
+            "type": "shell",
+            "command": "build.bat",
+            "args": ["gendata"],
+            "options": {
+                "shell": { "executable": "cmd.exe", "args": ["/d", "/c"] },
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true,
+                "echo": true
+            },
+            "runOptions": {
+                "instanceLimit": 1
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            // ---- 清理编译产物 ----
+            "label": "清理",
+            "type": "shell",
+            "command": "build.bat",
+            "args": ["clean"],
+            "options": {
+                "shell": { "executable": "cmd.exe", "args": ["/d", "/c"] },
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true,
+                "echo": true
+            },
+            "runOptions": {
+                "instanceLimit": 1
+            },
+            "problemMatcher": []
+        }
+    ]
+}

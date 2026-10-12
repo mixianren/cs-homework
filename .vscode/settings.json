@@ -1,0 +1,61 @@
+{
+    // =====================================================================
+    //  工程级 VS Code 配置
+    // ---------------------------------------------------------------------
+    //  本工程不用 CMake，编译由根目录的 build.bat 完成，
+    //  快捷键 F7 与任务列表见 .vscode/tasks.json。
+    // =====================================================================
+
+    // ---------------------------------------------------------------------
+    //  资源管理器：隐藏编译产物
+    //  目的：bin/ 下全是 .exe，混在源码里干扰浏览。
+    //  注意：只是【不显示】，文件仍在硬盘上，编译照常工作。
+    //        想看时按 Ctrl+P 直接搜文件名，或把下面的值改成 false。
+    // ---------------------------------------------------------------------
+    "files.exclude": {
+        "**/bin": true,
+        "**/output": true,
+        "**/*.obj": true,
+        "**/*.o": true,
+        "**/*.exe": true,
+        "**/*.a": true,
+        "**/*.dll": true
+    },
+
+    // 全局搜索（Ctrl+Shift+F）时同样跳过编译产物
+    "search.exclude": {
+        "**/bin": true,
+        "**/output": true
+    },
+
+    // ---------------------------------------------------------------------
+    //  终端编码
+    //  源码与程序输出都是 UTF-8，集成终端也必须用 UTF-8，
+    //  否则程序里的中文显示成乱码。build.bat 编译时还要靠它显示中文报错。
+    // ---------------------------------------------------------------------
+    "terminal.integrated.profiles.windows": {
+        "PowerShell (UTF-8)": {
+            "source": "PowerShell",
+            "args": [
+                "-NoExit",
+                "-Command",
+                "[Console]::OutputEncoding=[System.Text.Encoding]::UTF8; chcp 65001 > $null"
+            ]
+        },
+        "cmd (UTF-8)": {
+            "path": "cmd.exe",
+            "args": ["/K", "chcp 65001 > nul"]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "PowerShell (UTF-8)",
+
+    // 源码统一 UTF-8；Windows 下换行用 CRLF
+    "files.encoding": "utf8",
+    "files.eol": "\r\n",
+
+    // 关闭保存时自动格式化，避免打乱手工对齐的风格
+    "editor.formatOnSave": false,
+
+    // 显示不可见字符，便于发现 Tab 与空格混用
+    "editor.renderWhitespace": "boundary"
+}
